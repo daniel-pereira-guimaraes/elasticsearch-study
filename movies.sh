@@ -43,6 +43,8 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
   }
 }'
 
+# Delete a movie
+curl -s -XDELETE localhost:9200/movies/_doc/109487?pretty
 
 # Download movies.json
 curl -o movies.json http://media.sundog-soft.com/es7/movies.json
