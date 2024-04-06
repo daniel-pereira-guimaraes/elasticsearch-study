@@ -20,3 +20,10 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 # Get movies mapping
 curl -s -XGET localhost:9200/movies/_mapping
 
+# Insert a movie
+curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/109487 -d '
+{
+  "genre":["IMAX","Sci-Fi"],
+  "title":"Interestellar",
+  "year":2014
+}'
