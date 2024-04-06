@@ -51,3 +51,11 @@ curl -o movies.json http://media.sundog-soft.com/es7/movies.json
 
 # Import movies from json file
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @movies.json
+
+# Conditional update movie
+curl -s -H "Content-Type: application/json" -XPUT "localhost:9200/movies/_doc/109487?if_seq_no=10&if_primary_term=1" -d '
+{
+  "genres":["IMAX","Sci-Fi"],
+  "title":"Interestellar 2",
+  "year":2014
+}'
