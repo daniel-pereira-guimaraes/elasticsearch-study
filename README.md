@@ -62,3 +62,13 @@ curl -s -H "Content-Type: application/json" -XPUT "localhost:9200/movies/_doc/10
   "year":2014
 }'
 ```
+
+## Update movie, retry on conflict
+```
+curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/109487/_update?retry_on_conflict=5 -d '
+{
+  "doc":{
+    "title":"Interestellar 3"  
+  }
+}'
+```
