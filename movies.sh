@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Delete movies index
-curl -XDELETE localhost:9200/movies
+curl -s -XDELETE localhost:9200/movies
 
 echo -e "\n---\n"
 
 # Create movies index
-curl -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 {
   "mappings": {
 	"properties": {
@@ -16,4 +16,7 @@ curl -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 	}
   }
 }'
+
+# Get movies mapping
+curl -s -XGET localhost:9200/movies/_mapping
 
