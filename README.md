@@ -8,11 +8,11 @@
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 {
   "mappings": {
-	  "properties": {
-	    "year": {
-		    "type": "date"
-	    }
-  	}
+    "properties": {
+      "year": {
+        "type": "date"
+      }
+    }
   }
 }'
 ```
