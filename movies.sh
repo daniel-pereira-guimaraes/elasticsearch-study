@@ -33,3 +33,6 @@ curl -s -XGET localhost:9200/movies/_search?pretty
 
 # Download movies.json
 curl -o movies.json http://media.sundog-soft.com/es7/movies.json
+
+# Import movies from json file
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @movies.json
