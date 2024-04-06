@@ -27,3 +27,6 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
   "title":"Interestellar",
   "year":2014
 }'
+
+# Get all movies
+curl -s -XGET localhost:9200/movies/_search?pretty
