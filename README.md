@@ -255,3 +255,30 @@ curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search
   }
 }'
 ```
+
+## Ordering the results
+To order query results, set the **sort** parameter.
+
+### Order by year, ascending
+#### Simple query:
+```
+curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?sort=year&pretty"
+```
+
+#### Json query:
+```
+curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
+  "sort": [
+    { "year": "asc" }
+  ]
+}'
+```
+
+### Order by year, descending
+```
+curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
+  "sort": [
+    { "year": "desc" }
+  ]
+}'
+```
