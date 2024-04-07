@@ -94,3 +94,20 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
 ```
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @series.json
 ```
+
+## Get all films (details) from a serie (master)
+```
+curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?pretty -d '
+{
+  "query":{
+    "has_parent":{
+      "parent_type":"franchise",
+      "query":{
+        "match":{
+          "title":"Star Wars"
+        }
+      }
+    }
+  }
+}'
+```
