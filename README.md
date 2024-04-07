@@ -111,3 +111,20 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
   }
 }'
 ```
+
+## Get serie (master) from a film (detail)
+```
+curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?pretty -d '
+{
+  "query":{
+    "has_child":{
+      "type":"film",
+      "query":{
+        "match":{
+          "title":"The Force Awakens"
+        }
+      }
+    }
+  }
+}'
+```
