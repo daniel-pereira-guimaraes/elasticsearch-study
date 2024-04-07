@@ -72,3 +72,20 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
   }
 }'
 ```
+
+## Create series index (master/detail)
+```
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
+{
+  "mappings": {
+    "properties": {
+      "film_to_franchise": {
+        "type":"join",
+        "relations":{
+          "franchise":"filme"
+        }
+      }
+    }
+  }
+}'
+```
