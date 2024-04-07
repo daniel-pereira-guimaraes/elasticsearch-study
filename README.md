@@ -223,3 +223,18 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
   }
 }'
 ```
+
+# Find movies where title contains a few words
+```
+curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
+{
+  "query":{
+    "match_phrase":{
+      "title":{
+        "query":"episode star",
+        "slop":100
+      }
+    }
+  }
+}'
+```
