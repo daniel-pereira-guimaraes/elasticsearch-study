@@ -212,7 +212,7 @@ curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/
 }'
 ```
 
-# Find movies where title contains a phrase
+## Find movies where title contains a phrase
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -224,7 +224,7 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
 }'
 ```
 
-# Find movies where title contains a few words
+## Find movies where title contains a few words
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -235,6 +235,23 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
         "slop":100
       }
     }
+  }
+}'
+```
+
+## Pagination
+To use query result pagination, set the **from** and **size** parameters.
+
+### Pagination using simple query
+`curl -s -XGET "localhost:9200/movies/_search?pretty&from=0&size=2"`
+
+### Pagination using json query
+```
+curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
+  "from": 0,
+  "size": 2,
+  "query": {
+    "match_all": {}
   }
 }'
 ```
