@@ -129,5 +129,11 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 }'
 ```
 
-## Find a movie by title using a simple query
+## Find a movie by title, using a simple query
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=title:Wars&pretty"`
+
+## Find movies where year > 2015, using a simple query
+`curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2015&pretty"`
+
+## Find movies where year > 2010 AND year < 2016, using a simple query
+curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2010+AND+year:<2016&pretty"
