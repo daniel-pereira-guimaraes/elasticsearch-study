@@ -166,3 +166,18 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
   }
 }'
 ```
+
+## Find movies where year > 2010 AND year < 2016, using json query
+```
+curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
+{
+  "query":{
+    "range":{
+      "year":{
+        "gt":2010,
+        "lt":2016
+      }
+    }
+  }
+}'
+```
