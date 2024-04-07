@@ -181,3 +181,31 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
   }
 }'
 ```
+
+## Find movies where year > 2010 AND title contains "force", using json query
+```
+curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/_search?pretty" -d '{
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "year": { "gt": 2010 } } },
+        { "match": { "title": "force" } }
+      ]
+    }
+  }
+}'
+```
+
+## Find movies where year < 2010 OR year > 2015
+```
+curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/_search?pretty" -d '{
+  "query": {
+    "bool": {
+      "should": [
+        { "range": { "year": { "lt": 2010 } } },
+        { "range": { "year": { "gt": 2015 } } }
+      ]
+    }
+  }
+}'
+```
