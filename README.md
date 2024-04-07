@@ -82,7 +82,7 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
       "film_to_franchise": {
         "type":"join",
         "relations":{
-          "franchise":"filme"
+          "franchise":"film"
         }
       }
     }
