@@ -211,3 +211,15 @@ curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/
   }
 }'
 ```
+
+# Find movies where title contains a phrase
+```
+curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
+{
+  "query":{
+    "match_phrase":{
+      "title":"star wars"
+    }
+  }
+}'
+```
