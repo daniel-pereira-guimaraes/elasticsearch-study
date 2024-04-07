@@ -89,3 +89,8 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
   }
 }'
 ```
+
+## Import series from json file (master/detail)
+```
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @series.json
+```
