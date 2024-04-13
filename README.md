@@ -411,7 +411,9 @@ curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" 
 ```
 
 #### Import product data from json file
+```
 curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/_bulk?pretty" --data-binary "@products.json"
+```
 
 ### Count of products by group
 ```
