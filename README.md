@@ -434,3 +434,35 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/
   }
 }'
 ```
+
+### Min, max and avg price by group
+
+```
+curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/_search?pretty' -d '{
+  "size": 0,
+  "aggs": {
+    "group_aggs": {
+      "terms": {
+        "field": "group"
+      },
+      "aggs": {
+        "min_price": {
+          "min": {
+            "field": "price"
+          }
+        },
+        "max_price": {
+          "max": {
+            "field": "price"
+          }
+        },
+        "avg_price": {
+          "avg": {
+            "field": "price"
+          }
+        }
+      }
+    }
+  }
+}'
+```
