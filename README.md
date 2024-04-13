@@ -285,3 +285,10 @@ curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search
   ]
 }'
 ```
+
+## Importing data from CSV file using Logstash
+### Resources:
++ [countries.csv](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/countries.csv)
++ [csv-countries.conf](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/csv-countries.conf)
+### Command line:
+`c:\logstash\bin\logstash -f C:\data\csv-countries.conf`
