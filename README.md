@@ -390,3 +390,40 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/countries
   }
 }'
 ```
+
+### Preparing data for aggregation study
+
+#### Create products index
+
+```
+curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" -d '
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "text" },
+      "group": { "type": "keyword" },
+      "stock": { "type": "integer" },
+      "price": { "type": "float" }
+    }
+  }
+}'
+```
+
+#### Import product data from json file
+curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/_bulk?pretty" --data-binary "@products.json"
+
+### Count of products by group
+```
+curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/_search?pretty'  -d '
+{
+  "size": 0,
+  "aggs": {
+    "group_aggs": {
+      "terms": {
+        "field": "group"
+      }
+    }
+  }
+}'
+```
