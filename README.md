@@ -377,6 +377,7 @@ curl -XDELETE http://localhost:9200/temp-index
 
 ### Count of countries by currency
 
+```
 curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/countries/_search?pretty'  -d '
 {
   "size": 0,
@@ -388,3 +389,4 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/countries
     }
   }
 }'
+```
