@@ -413,3 +413,22 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/
   }
 }'
 ```
+
+### Total stock by group
+curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/_search?pretty' -d '{
+  "size": 0,
+  "aggs": {
+    "group_aggs": {
+      "terms": {
+        "field": "group"
+      },
+      "aggs": {
+        "total_stock": {
+          "sum": {
+            "field": "stock"
+          }
+        }
+      }
+    }
+  }
+}'
