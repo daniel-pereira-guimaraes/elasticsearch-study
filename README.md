@@ -371,3 +371,20 @@ curl -H 'Content-Type: application/json' -XPOST "http://localhost:9200/_reindex?
 ```
 curl -XDELETE http://localhost:9200/temp-index
 ```
+
+
+## Aggregating data
+
+### Count of countries by currency
+
+curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/countries/_search?pretty'  -d '
+{
+  "size": 0,
+  "aggs": {
+    "currency_aggs": {
+      "terms": {
+        "field": "currency"
+      }
+    }
+  }
+}'
