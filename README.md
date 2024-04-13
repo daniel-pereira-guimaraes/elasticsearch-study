@@ -1,5 +1,8 @@
 # Elasticsearch Study
 
+## List all index
+curl -X GET http://localhost:9200/_cat/indices?v
+
 ## Delete movies index
 `curl -s -XDELETE localhost:9200/movies`
 
