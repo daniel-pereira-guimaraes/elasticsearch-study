@@ -366,6 +366,21 @@ curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?
   ]
 }'
 ```
+#### Returning only some attributes
+```
+curl -s -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?pretty&filter_path=hits.hits._source" -d '
+{
+  "query": {
+    "match": {
+      "name" : "PVC"
+    }
+  },
+  "sort": [
+    { "name.raw": "asc" }
+  ],
+  "_source": ["id", "name", "group", "stock", "price"]
+}'
+```
 
 ## Changing the field type
 
