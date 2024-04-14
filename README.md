@@ -352,6 +352,21 @@ curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?
 }'
 ```
 
+### Query products by name and order by name.raw
+```
+curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?pretty" -d '
+{
+  "query": {
+    "match": {
+      "name" : "PVC"
+    }
+  },
+  "sort": [
+    { "name.raw": "asc" }
+  ]
+}'
+```
+
 ## Changing the field type
 
 ### Create a temporary index
