@@ -35,6 +35,9 @@ curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" 
 }'
 ```
 #### Import product data from json file
+##### Resource:
++ [products.json](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/products.json)
+##### Command line:
 ```
 curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/_bulk?pretty" --data-binary "@products.json"
 ```
