@@ -43,7 +43,14 @@ curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" 
   "mappings": {
     "properties": {
       "id": { "type": "integer" },
-      "name": { "type": "text" },
+      "name": { 
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
+      },
       "group": { "type": "keyword" },
       "stock": { "type": "integer" },
       "price": { "type": "float" }
