@@ -1,5 +1,53 @@
 # Elasticsearch Study
 
+## Importing data
+
+### Import movies data from JSON file
+#### Resource:
++ [movies.json](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/movies.json)
+#### Command line:
+```
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @movies.json
+```
+
+### Import series from json file (master/detail)
+#### Resource:
++ [series.json](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/series.json)
+#### Command line:
+```
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @series.json
+```
+
+### Create product index and import data from JSON file
+#### Create products index
+```
+curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" -d '
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "text" },
+      "group": { "type": "keyword" },
+      "stock": { "type": "integer" },
+      "price": { "type": "float" }
+    }
+  }
+}'
+```
+#### Import product data from json file
+```
+curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/_bulk?pretty" --data-binary "@products.json"
+```
+
+### Import countries data from CSV file, using Logstash
+#### Resources:
++ [countries.csv](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/countries.csv)
++ [csv-countries.conf](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/csv-countries.conf)
+#### Command line:
+```
+c:\logstash\bin\logstash -f C:\data\csv-countries.conf
+```
+
 ## List all indices
 `curl -X GET http://localhost:9200/_cat/indices?v`
 
@@ -52,10 +100,6 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
 ## Delete a movie
 `curl -s -XDELETE localhost:9200/movies/_doc/109487?pretty`
 
-## Import movies from json file
-`curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @movies.json`
-
-
 ## Conditional update movie
 ```
 curl -s -H "Content-Type: application/json" -XPUT "localhost:9200/movies/_doc/109487?if_seq_no=10&if_primary_term=1" -d '
@@ -91,11 +135,6 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
     }
   }
 }'
-```
-
-## Import series from json file (master/detail)
-```
-curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @series.json
 ```
 
 ## Get all films (details) from a serie (master)
@@ -267,7 +306,6 @@ To order query results, set the **sort** parameter.
 ```
 curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?sort=year&pretty"
 ```
-
 #### Json query:
 ```
 curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
@@ -286,18 +324,27 @@ curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search
 }'
 ```
 
-## Importing data from CSV file using Logstash
-### Resources:
-+ [countries.csv](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/countries.csv)
-+ [csv-countries.conf](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/csv-countries.conf)
-### Command line:
-`c:\logstash\bin\logstash -f C:\data\csv-countries.conf`
-
+### Query three products with the highest prices
+```
+curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?pretty" -d '
+{
+  "query": {
+    "match_all": {}
+  },
+  "sort": [
+    {
+      "price": {
+        "order": "desc"
+      }
+    }
+  ],
+  "size": 3
+}'
+```
 
 ## Changing the field type
 
 ### Create a temporary index
-
 ```
 curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/temp-index?pretty"  -d '
 {
@@ -315,7 +362,6 @@ curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/temp-index
 ```
 
 ### Copy data to temporary index
-
 ```
 curl -H 'Content-Type: application/json' -XPOST "http://localhost:9200/_reindex?pretty" -d '
 {
@@ -329,13 +375,11 @@ curl -H 'Content-Type: application/json' -XPOST "http://localhost:9200/_reindex?
 ```
 
 ### Delete old index
-
 ```
 curl -XDELETE http://localhost:9200/countries
 ```
 
 ### Recreate the old index
-
 ```
 curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/countries?pretty"  -d '
 {
@@ -353,7 +397,6 @@ curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/countries?
 ```
 
 ### Copy data to old recreated index
-
 ```
 curl -H 'Content-Type: application/json' -XPOST "http://localhost:9200/_reindex?pretty" -d '
 {
@@ -367,37 +410,12 @@ curl -H 'Content-Type: application/json' -XPOST "http://localhost:9200/_reindex?
 ```
 
 ### Delete temporary index
-
 ```
 curl -XDELETE http://localhost:9200/temp-index
 ```
 
 
 ## Aggregating data
-
-### Preparing data for aggregation study
-
-#### Create products index
-
-```
-curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" -d '
-{
-  "mappings": {
-    "properties": {
-      "id": { "type": "integer" },
-      "name": { "type": "text" },
-      "group": { "type": "keyword" },
-      "stock": { "type": "integer" },
-      "price": { "type": "float" }
-    }
-  }
-}'
-```
-
-#### Import product data from json file
-```
-curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/_bulk?pretty" --data-binary "@products.json"
-```
 
 ### Count of products by group
 ```
