@@ -10,15 +10,32 @@
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @movies.json
 ```
 
-### Import series from json file (master/detail)
-#### Resource:
+### Create series index and import data
+#### Create series index (master/detail)
+```
+curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
+{
+  "mappings": {
+    "properties": {
+      "film_to_franchise": {
+        "type":"join",
+        "relations":{
+          "franchise":"film"
+        }
+      }
+    }
+  }
+}'
+```
+#### Import series from JSON file
+##### Resource:
 + [series.json](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/series.json)
-#### Command line:
+##### Command line:
 ```
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/_bulk?pretty --data-binary @series.json
 ```
 
-### Create product index and import data from JSON file
+### Create product index and import data
 #### Create products index
 ```
 curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" -d '
@@ -34,7 +51,7 @@ curl -H "Content-Type: application/json" -XPUT "http://localhost:9200/products" 
   }
 }'
 ```
-#### Import product data from json file
+#### Import product data from JSON file
 ##### Resource:
 + [products.json](https://github.com/daniel-pereira-guimaraes/elasticsearch-study/blob/main/products.json)
 ##### Command line:
@@ -119,23 +136,6 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
 {
   "doc":{
     "title":"Interestellar 3"  
-  }
-}'
-```
-
-## Create series index (master/detail)
-```
-curl -s -H "Content-Type: application/json" -XPUT localhost:9200/series -d '
-{
-  "mappings": {
-    "properties": {
-      "film_to_franchise": {
-        "type":"join",
-        "relations":{
-          "franchise":"film"
-        }
-      }
-    }
   }
 }'
 ```
