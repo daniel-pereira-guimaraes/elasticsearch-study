@@ -414,7 +414,7 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/
 }'
 ```
 
-### Total stock by group
+### Quantity in stock per group
 ```
 curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/_search?pretty' -d '{
   "size": 0,
@@ -427,6 +427,31 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/
         "total_stock": {
           "sum": {
             "field": "stock"
+          }
+        }
+      }
+    }
+  }
+}'
+```
+
+### Financial value of stock by group
+
+```
+curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?pretty" -d '
+{
+  "size": 0,
+  "aggs": {
+    "by_group": {
+      "terms": {
+        "field": "group"
+      },
+      "aggs": {
+        "total": {
+          "sum": {
+            "script": {
+              "source": "doc[\"stock\"].value * doc[\"price\"].value"
+            }
           }
         }
       }
