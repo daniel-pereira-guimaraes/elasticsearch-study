@@ -467,7 +467,7 @@ curl -H 'Content-Type: application/json' -XPOST 'http://localhost:9200/products/
 }'
 ```
 
-### Calculated field - total = stock * price
+### Calculated field: total = stock * price
 
 ```
 curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?pretty" -d '
