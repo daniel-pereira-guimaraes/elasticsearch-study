@@ -378,7 +378,7 @@ curl -s -H 'Content-Type: application/json' -XGET "localhost:9200/products/_sear
   "sort": [
     { "name.raw": "asc" }
   ],
-  "_source": ["id", "name", "group", "stock", "price"]
+  "_source": ["id", "name", "price"]
 }'
 ```
 
