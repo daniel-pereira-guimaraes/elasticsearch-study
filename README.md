@@ -576,3 +576,21 @@ curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?
   "size": 10
 }'
 ```
+
+## Running Elasticsearch Docker container with authentication enabled
+
+```
+docker run -d \
+  -e discovery.type=single-node \
+  -e xpack.security.enabled=true \
+  -e ELASTIC_PASSWORD=password \
+  -p 9200:9200 \
+  --name elasticsearch \
+  elasticsearch:7.17.19
+```
+
+### Access Elasticsearch with username and password
+
+```
+curl -u elastic:password http://localhost:9200?pretty
+```
