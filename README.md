@@ -1,5 +1,84 @@
 # Elasticsearch Study
 
+## Preparing the study environment
+We will study **Elasticsearch** and **Logstash**. So we need to install these tools.
+
+### Running Elasticsearch with Docker
+Before proceeding, make sure you have **Docker** installed and running on your system.
+More information at: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)
+
+#### Basic configuration
+```
+docker run -d -p 9200:9200 --name my_container elasticsearch:8.13.4
+```
+Where:
++ **9200**: Elasticsearch TCP/IP port.
++ **my_container**: Arbitrary name for the container.
++ **elasticsearch:8.13.4**: Docker image name and version for Elasticsearch.
+
+After executing the aforementioned command, please wait until the container is operational. 
+Utilize the following command to verify the status of Elasticsearch:
+```
+curl http://localhost:9200?pretty
+```
+
+Upon Elasticsearch's readiness, the output should resemble the following:
+```
+{
+  "name" : "115dcea1258b",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "PJB8bJTcQouZybMFHH2-xg",
+  "version" : {
+    "number" : "8.13.0",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "09df99393193b2c53d92899662a8b8b3c55b45cd",
+    "build_date" : "2024-03-22T03:35:46.757803203Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.10.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+```
+
+#### With custom network
+```
+docker network create my_network
+docker run -d -p 9200:9200 --name my_container --net my_network elasticsearch:8.13.4
+```
+Where **my_network** is a arbitrary name for Docker network.
+
+#### With basic authentication enabled
+```
+docker run -d \
+  -e discovery.type=single-node \
+  -e xpack.security.enabled=true \
+  -e ELASTIC_PASSWORD=my_password \
+  -p 9200:9200 \
+  --name my_container \
+  elasticsearch:8.13.4
+```
+Where **my_password** is the password that should be provided for each access to Elasticsearch, as shown in the following example:
+```
+curl -u elastic:my_password http://localhost:9200?pretty
+```
+
+#### With custom network and basic authentication enabled
+```
+docker network create my_network
+
+docker run -d \
+  -e discovery.type=single-node \
+  -e xpack.security.enabled=true \
+  -e ELASTIC_PASSWORD=my_password \
+  -p 9200:9200 \
+  --name my_container \
+  --net my_network \
+  elasticsearch:8.13.4
+```
+
 ## Importing data
 
 ### Import movies data from JSON file
@@ -575,22 +654,4 @@ curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?
   "_source": ["id", "name", "stock", "price"],
   "size": 10
 }'
-```
-
-## Running Elasticsearch Docker container with authentication enabled
-
-```
-docker run -d \
-  -e discovery.type=single-node \
-  -e xpack.security.enabled=true \
-  -e ELASTIC_PASSWORD=password \
-  -p 9200:9200 \
-  --name elasticsearch \
-  elasticsearch:7.17.19
-```
-
-### Access Elasticsearch with username and password
-
-```
-curl -u elastic:password http://localhost:9200?pretty
 ```
