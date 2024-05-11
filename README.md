@@ -3,32 +3,35 @@
 ## Table of Contents
 
 + [Preparing the study environment](#preparing-the-study-environment)
-   - [Installing Elasticsearch on Windows, using the zip package](#installing-elasticsearch-on-windows-using-the-zip-package)
-   - [Running Elasticsearch with Docker](#running-elasticsearch-with-docker)
-      - [Basic configuration](#basic-configuration)
-      - [With custom network](#with-custom-network)
-      - [With basic authentication enabled](#with-basic-authentication-enabled)
-      - [With custom network and basic authentication enabled](#with-custom-network-and-basic-authentication-enabled)
-   - [Checking Elasticsearch status](#checking-elasticsearch-status)
+   + [Installing Elasticsearch on Windows, using the zip package](#installing-elasticsearch-on-windows-using-the-zip-package)
+   + [Running Elasticsearch with Docker](#running-elasticsearch-with-docker)
+      + [Basic configuration](#basic-configuration)
+      + [With custom network](#with-custom-network)
+      + [With basic authentication enabled](#with-basic-authentication-enabled)
+      + [With custom network and basic authentication enabled](#with-custom-network-and-basic-authentication-enabled)
+   + [Checking Elasticsearch status](#checking-elasticsearch-status)
 + [Installing Logstash on Windows, using zip package](#installing-logstash-on-windows-using-zip-package)
 + [Importing data](#importing-data)
-   - [Import movies data from JSON file](#import-movies-data-from-json-file)
-   - [Create series index and import data](#create-series-index-and-import-data)
-   - [Create product index and import data](#create-product-index-and-import-data)
-   - [Import countries data from CSV file, using Logstash](#import-countries-data-from-csv-file-using-logstash)
-+ [List all indices](#list-all-indices)
-+ [Delete movies index](#delete-movies-index)
-+ [Create movies index](#create-movies-index)
-+ [Get movies mapping](#get-movies-mapping)
-+ [Insert a movie](#insert-a-movie)
-+ [Get all movies](#get-all-movies)
-+ [Get a movie](#get-a-movie)
-+ [Update a movie](#update-a-movie)
-+ [Delete a movie](#delete-a-movie)
-+ [Conditional update movie](#conditional-update-movie)
-+ [Update movie, retry on conflict](#update-movie-retry-on-conflict)
-+ [Get all films (details) from a serie (master)](#get-all-films-details-from-a-serie-master)
-+ [Get serie (master) from a film (detail)](#get-serie-master-from-a-film-detail)
+   + [Import movies data from JSON file](#import-movies-data-from-json-file)
+   + [Create series index and import data](#create-series-index-and-import-data)
+   + [Create product index and import data](#create-product-index-and-import-data)
+   + [Import countries data from CSV file, using Logstash](#import-countries-data-from-csv-file-using-logstash)
++ [Index operations](#index-operations)
+   + [List all indices](#list-all-indices)
+   + [Delete movies index](#delete-movies-index)
+   + [Create movies index](#create-movies-index)
+   + [Get movies mapping](#get-movies-mapping)
++ [Inserting, getting, updating and deleting documents](#inserting-getting-updating-and-deleting-documents)
+   + [Insert a movie](#insert-a-movie)
+   + [Get all movies](#get-all-movies)
+   + [Get a movie](#get-a-movie)
+   + [Update a movie](#update-a-movie)
+   + [Conditional update movie](#conditional-update-movie)
+   + [Update movie, retry on conflict](#update-movie-retry-on-conflict)
+   + [Delete a movie](#delete-a-movie)
++ [Master/details queries](master-details-queries)
+   + [Get all films (details) from a serie (master)](#get-all-films-details-from-a-serie-master)
+   + [Get serie (master) from a film (detail)](#get-serie-master-from-a-film-detail)
 + [Finding data with simple query](#finding-data-with-simple-query)
    + [Find movies by title](#find-movies-by-title)
    + [Find movies where year > 2015](#find-movies-where-year--2015)
@@ -239,13 +242,15 @@ c:\logstash\bin\logstash -f C:\data\csv-countries.conf
 ```
 See also: [Installing Logstash on Windows, using zip package](#installing-logstash-on-windows-using-zip-package)
 
-## List all indices
+## Index operations
+
+### List all indices
 `curl -X GET http://localhost:9200/_cat/indices?v`
 
-## Delete movies index
+### Delete movies index
 `curl -s -XDELETE localhost:9200/movies`
 
-## Create movies index
+### Create movies index
 ```
 curl -s -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 {
@@ -259,10 +264,12 @@ curl -s -H "Content-Type: application/json" -XPUT localhost:9200/movies -d '
 }'
 ```
 
-## Get movies mapping
+### Get movies mapping
 `curl -s -XGET localhost:9200/movies/_mapping`
 
-## Insert a movie
+## Inserting, getting, updating and deleting documents
+
+### Insert a movie
 ```
 curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/109487 -d '
 {
@@ -272,13 +279,13 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
 }'
 ```
 
-## Get all movies
+### Get all movies
 `curl -s -XGET localhost:9200/movies/_search?pretty`
 
-## Get a movie
+### Get a movie
 `curl -s -XGET localhost:9200/movies/_doc/109487?pretty`
 
-## Update a movie
+### Update a movie
 ```
 curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/109487/_update -d '
 {
@@ -288,10 +295,7 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
 }'
 ```
 
-## Delete a movie
-`curl -s -XDELETE localhost:9200/movies/_doc/109487?pretty`
-
-## Conditional update movie
+### Conditional update movie
 ```
 curl -s -H "Content-Type: application/json" -XPUT "localhost:9200/movies/_doc/109487?if_seq_no=10&if_primary_term=1" -d '
 {
@@ -301,7 +305,7 @@ curl -s -H "Content-Type: application/json" -XPUT "localhost:9200/movies/_doc/10
 }'
 ```
 
-## Update movie, retry on conflict
+### Update movie, retry on conflict
 ```
 curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/109487/_update?retry_on_conflict=5 -d '
 {
@@ -311,7 +315,12 @@ curl -s -H "Content-Type: application/json" -XPOST localhost:9200/movies/_doc/10
 }'
 ```
 
-## Get all films (details) from a serie (master)
+### Delete a movie
+`curl -s -XDELETE localhost:9200/movies/_doc/109487?pretty`
+
+## Master/details queries
+
+### Get all films (details) from a serie (master)
 ```
 curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?pretty -d '
 {
@@ -328,7 +337,7 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 }'
 ```
 
-## Get serie (master) from a film (detail)
+### Get serie (master) from a film (detail)
 ```
 curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?pretty -d '
 {
@@ -345,7 +354,7 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 }'
 ```
 
-### Finding data with simple query
+## Finding data with simple query
 
 ### Find movies by title
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=title:Wars&pretty"`
@@ -358,6 +367,7 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 
 ### Find movies where year > 2010 AND title contains "force"
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2010+AND+title:force&pretty"`
+
 
 ## Finding data using JSON query
 
