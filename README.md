@@ -172,6 +172,7 @@ curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/products/
 ```
 c:\logstash\bin\logstash -f C:\data\csv-countries.conf
 ```
+See also: [Installing Logstash on Windows, using zip package](#installing-logstash-on-windows-using-zip-package)
 
 ## List all indices
 `curl -X GET http://localhost:9200/_cat/indices?v`
