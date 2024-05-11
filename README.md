@@ -29,17 +29,19 @@
 + [Update movie, retry on conflict](#update-movie-retry-on-conflict)
 + [Get all films (details) from a serie (master)](#get-all-films-details-from-a-serie-master)
 + [Get serie (master) from a film (detail)](#get-serie-master-from-a-film-detail)
-+ [Find movies by title, using a simple query](#find-movies-by-title-using-a-simple-query)
-+ [Find movies where year > 2015, using a simple query](#find-movies-where-year--2015-using-a-simple-query)
-+ [Find movies where year > 2010 AND year < 2016, using a simple query](#find-movies-where-year--2010-and-year--2016-using-a-simple-query)
-+ [Find movies where year > 2010 AND title contains "force", using a simple query](#find-movies-where-year--2010-and-title-contains-force-using-a-simple-query)
-+ [Find movies by title, using json query](#find-movies-by-title-using-json-query)
-+ [Find movies where year > 2015, using json query](#find-movies-where-year--2015-using-json-query)
-+ [Find movies where year > 2010 AND year < 2016, using json query](#find-movies-where-year--2010-and-year--2016-using-json-query)
-+ [Find movies where year > 2010 AND title contains "force", using json query](#find-movies-where-year--2010-and-title-contains-force-using-json-query)
-+ [Find movies where year < 2010 OR year > 2015](#find-movies-where-year--2010-or-year--2015)
-+ [Find movies where title contains a phrase](#find-movies-where-title-contains-a-phrase)
-+ [Find movies where title contains a few words](#find-movies-where-title-contains-a-few-words)
++ [Finding data with simple query](#finding-data-with-simple-query)
+   + [Find movies by title](#find-movies-by-title)
+   + [Find movies where year > 2015](#find-movies-where-year--2015)
+   + [Find movies where year > 2010 AND year < 2016](#find-movies-where-year--2010-and-year--2016)
+   + [Find movies where year > 2010 AND title contains "force"](#find-movies-where-year--2010-and-title-contains-force)
++ [Finding data using json query](#finding-data-using-json query)
+   + [Find movies by title](#find-movies-by-title)
+   + [Find movies where year > 2015](#find-movies-where-year--2015)
+   + [Find movies where year > 2010 AND year < 2016](#find-movies-where-year--2010-and-year--2016)
+   + [Find movies where year > 2010 AND title contains "force"](#find-movies-where-year--2010-and-title-contains-force)
+   + [Find movies where year < 2010 OR year > 2015](#find-movies-where-year--2010-or-year--2015)
+   + [Find movies where title contains a phrase](#find-movies-where-title-contains-a-phrase)
+   + [Find movies where title contains a few words](#find-movies-where-title-contains-a-few-words)
 + [Pagination](#pagination)
   - [Pagination using simple query](#pagination-using-simple-query)
   - [Pagination using json query](#pagination-using-json-query)
@@ -343,19 +345,23 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 }'
 ```
 
-## Find movies by title, using a simple query
+### Finding data with simple query
+
+### Find movies by title
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=title:Wars&pretty"`
 
-## Find movies where year > 2015, using a simple query
+### Find movies where year > 2015
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2015&pretty"`
 
-## Find movies where year > 2010 AND year < 2016, using a simple query
+### Find movies where year > 2010 AND year < 2016
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2010+AND+year:<2016&pretty"`
 
-## Find movies where year > 2010 AND title contains "force", using a simple query
+### Find movies where year > 2010 AND title contains "force"
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2010+AND+title:force&pretty"`
 
-## Find movies by title, using json query
+## Finding data using json query
+
+### Find movies by title
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -367,7 +373,7 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
 }'
 ```
 
-## Find movies where year > 2015, using json query
+### Find movies where year > 2015
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -381,7 +387,7 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
 }'
 ```
 
-## Find movies where year > 2010 AND year < 2016, using json query
+### Find movies where year > 2010 AND year < 2016
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -396,7 +402,7 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
 }'
 ```
 
-## Find movies where year > 2010 AND title contains "force", using json query
+### Find movies where year > 2010 AND title contains "force"
 The word **must** is equivalent to the **AND** operator.
 ```
 curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/_search?pretty" -d '{
@@ -411,7 +417,7 @@ curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/
 }'
 ```
 
-## Find movies where year < 2010 OR year > 2015
+### Find movies where year < 2010 OR year > 2015
 The word **should** is equivalent to the **OR** operator.
 ```
 curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/_search?pretty" -d '{
@@ -426,7 +432,7 @@ curl -s -H "Content-Type: application/json" -XGET "http://127.0.0.1:9200/movies/
 }'
 ```
 
-## Find movies where title contains a phrase
+### Find movies where title contains a phrase
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
@@ -438,7 +444,7 @@ curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_s
 }'
 ```
 
-## Find movies where title contains a few words
+### Find movies where title contains a few words
 ```
 curl -s -H "Content-Type:application/json" -XGET http://127.0.0.1:9200/movies/_search?pretty -d'
 {
