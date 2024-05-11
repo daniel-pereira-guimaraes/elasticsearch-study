@@ -3,6 +3,16 @@
 ## Preparing the study environment
 We will study **Elasticsearch** and **Logstash**. So we need to install these tools.
 
+### Installing Elasticsearch on Windows, using the zip package
++ Download the [Elasticsearch zip package](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.13.4-windows-x86_64.zip) for Windows.
++ Extract the contents of the zip file to a directory (for example: C:\elasticsearch).
++ Open CMD or PowerShell, run the following command and wait:
+```
+C:\elasticsearch\bin\elasticsearch.bat
+```
+See also: [Checking Elasticsearch status](#checking-elasticsearch-status)
+
+  
 ### Running Elasticsearch with Docker
 Before proceeding, make sure you have **Docker** installed and running on your system.
 More information at: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)
@@ -15,33 +25,6 @@ Where:
 + **9200**: Elasticsearch TCP/IP port.
 + **my_container**: Arbitrary name for the container.
 + **elasticsearch:8.13.4**: Docker image name and version for Elasticsearch.
-
-After executing the aforementioned command, please wait until the container is operational. 
-Utilize the following command to verify the status of Elasticsearch:
-```
-curl http://localhost:9200?pretty
-```
-
-Upon Elasticsearch's readiness, the output should resemble the following:
-```
-{
-  "name" : "115dcea1258b",
-  "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "PJB8bJTcQouZybMFHH2-xg",
-  "version" : {
-    "number" : "8.13.0",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "09df99393193b2c53d92899662a8b8b3c55b45cd",
-    "build_date" : "2024-03-22T03:35:46.757803203Z",
-    "build_snapshot" : false,
-    "lucene_version" : "9.10.0",
-    "minimum_wire_compatibility_version" : "7.17.0",
-    "minimum_index_compatibility_version" : "7.0.0"
-  },
-  "tagline" : "You Know, for Search"
-}
-```
 
 #### With custom network
 ```
@@ -77,6 +60,36 @@ docker run -d \
   --name my_container \
   --net my_network \
   elasticsearch:8.13.4
+```
+
+### Checking Elasticsearch status
+In the terminal (CMD or PowerShell on Windows), execute this command:
+```
+curl http://localhost:9200?pretty
+```
+But if basic authentication is enabled in Elasticsearch, the command should include the credentials, such as:
+```
+curl -u elastic:my_password http://localhost:9200?pretty
+```
+Example of the expected output:
+```
+{
+  "name" : "115dcea1258b",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "PJB8bJTcQouZybMFHH2-xg",
+  "version" : {
+    "number" : "8.13.0",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "09df99393193b2c53d92899662a8b8b3c55b45cd",
+    "build_date" : "2024-03-22T03:35:46.757803203Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.10.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 ```
 
 ## Importing data
