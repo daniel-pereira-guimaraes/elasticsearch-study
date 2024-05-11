@@ -92,6 +92,12 @@ Example of the expected output:
 }
 ```
 
+### Installing Logstash on Windows, using zip package
++ Download the [Logstash zip package](https://artifacts.elastic.co/downloads/logstash/logstash-8.13.4-windows-x86_64.zip) for Windows.
++ Extract the contents of the zip file to a directory (for example: C:\logstash).
+
+See also: [Import countries data from CSV file, using Logstash](#import-countries-data-from-csv-file-using-logstash)
+
 ## Importing data
 
 ### Import movies data from JSON file
