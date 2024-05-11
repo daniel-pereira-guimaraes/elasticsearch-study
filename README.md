@@ -34,7 +34,7 @@
    + [Find movies where year > 2015](#find-movies-where-year--2015)
    + [Find movies where year > 2010 AND year < 2016](#find-movies-where-year--2010-and-year--2016)
    + [Find movies where year > 2010 AND title contains "force"](#find-movies-where-year--2010-and-title-contains-force)
-+ [Finding data using json query](#finding-data-using-json query)
++ [Finding data using JSON query](#finding-data-using-json-query)
    + [Find movies by title](#find-movies-by-title-1)
    + [Find movies where year > 2015](#find-movies-where-year--2015-1)
    + [Find movies where year > 2010 AND year < 2016](#find-movies-where-year--2010-and-year--2016-1)
@@ -44,7 +44,7 @@
    + [Find movies where title contains a few words](#find-movies-where-title-contains-a-few-words)
 + [Pagination](#pagination)
   - [Pagination using simple query](#pagination-using-simple-query)
-  - [Pagination using json query](#pagination-using-json-query)
+  - [Pagination using JSON query](#pagination-using-json-query)
 + [Ordering the results](#ordering-the-results)
   - [Order by year, ascending](#order-by-year-ascending)
   - [Order by year, descending](#order-by-year-descending)
@@ -359,7 +359,7 @@ curl -s -H "Content-Type: application/json" -XGET localhost:9200/series/_search?
 ### Find movies where year > 2010 AND title contains "force"
 `curl -s -XGET "http://127.0.0.1:9200/movies/_search?q=year:>2010+AND+title:force&pretty"`
 
-## Finding data using json query
+## Finding data using JSON query
 
 ### Find movies by title
 ```
@@ -465,7 +465,7 @@ To use query result pagination, set the **from** and **size** parameters.
 ### Pagination using simple query
 `curl -s -XGET "localhost:9200/movies/_search?pretty&from=0&size=2"`
 
-### Pagination using json query
+### Pagination using JSON query
 ```
 curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
   "from": 0,
@@ -484,7 +484,7 @@ To order query results, set the **sort** parameter.
 ```
 curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?sort=year&pretty"
 ```
-#### Json query:
+#### JSON query:
 ```
 curl -s -H "Content-Type: application/json" -XGET "localhost:9200/movies/_search?pretty" -d '{
   "sort": [
