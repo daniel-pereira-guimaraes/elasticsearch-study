@@ -79,6 +79,7 @@
   + [Trying insert a new country with new user credentials](#trying-insert-a-new-country-with-new-user-credentials)
   + [Deleting an user](#deleting-an-user)
   + [Deleting a role](#deleting-a-role)
+  + [Resetting password via command line script](#resetting-password-via-command-line-script)
   + [More information about Elasticsearch security](#more-information-about-elasticsearch-security)
 
 ## Preparing the study environment
@@ -925,6 +926,16 @@ curl -s -u elastic:password -X DELETE "localhost:9200/_security/role/read_only_c
 {"found":true}
 ```
 
+### Resetting password via command line script
++ Access the **bin** subdirectory of your elasticsearch installation.
++ Run **elasticsearch-reset-password** script:
+  + `elasticsearch-reset-password <options> --username <username>`
++ Examples:
+  + Reset the password for the **elastic** user to an automatically generated password:
+    + `elasticsearch-reset-password -a --username elastic`
+  + Reset the password for the **elastic** user to a specified password:
+    + `elasticsearch-reset-password -i --username elastic`
+
 ### More information about Elasticsearch security
-Para obter mais informações sobre segurança no Elasticsearch, 
-[clique aqui](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html).
+For more information about Elasticsearch security, 
+[clique here!](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html)
