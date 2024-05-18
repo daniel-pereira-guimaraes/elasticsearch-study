@@ -46,27 +46,40 @@
    + [Find movies where title contains a phrase](#find-movies-where-title-contains-a-phrase)
    + [Find movies where title contains a few words](#find-movies-where-title-contains-a-few-words)
 + [Pagination](#pagination)
-  - [Pagination using simple query](#pagination-using-simple-query)
-  - [Pagination using JSON query](#pagination-using-json-query)
+  + [Pagination using simple query](#pagination-using-simple-query)
+  + [Pagination using JSON query](#pagination-using-json-query)
 + [Ordering the results](#ordering-the-results)
-  - [Order by year, ascending](#order-by-year-ascending)
-  - [Order by year, descending](#order-by-year-descending)
-  - [Query three products with the highest prices](#query-three-products-with-the-highest-prices)
-  - [Query products by name and order by name.raw](#query-products-by-name-and-order-by-nameraw)
-  - [Returning only some attributes](#returning-only-some-attributes)
+  + [Order by year, ascending](#order-by-year-ascending)
+  + [Order by year, descending](#order-by-year-descending)
+  + [Query three products with the highest prices](#query-three-products-with-the-highest-prices)
+  + [Query products by name and order by name.raw](#query-products-by-name-and-order-by-nameraw)
+  + [Returning only some attributes](#returning-only-some-attributes)
 + [Changing the field type](#changing-the-field-type)
-  - [Create a temporary index](#create-a-temporary-index)
-  - [Copy data to temporary index](#copy-data-to-temporary-index)
-  - [Delete old index](#delete-old-index)
-  - [Recreate the old index](#recreate-the-old-index)
-  - [Copy data to old recreated index](#copy-data-to-old-recreated-index)
-  - [Delete temporary index](#delete-temporary-index)
+  + [Create a temporary index](#create-a-temporary-index)
+  + [Copy data to temporary index](#copy-data-to-temporary-index)
+  + [Delete old index](#delete-old-index)
+  + [Recreate the old index](#recreate-the-old-index)
+  + [Copy data to old recreated index](#copy-data-to-old-recreated-index)
+  + [Delete temporary index](#delete-temporary-index)
 + [Aggregating data](#aggregating-data)
-  - [Count of products by group](#count-of-products-by-group)
-  - [Quantity in stock per group](#quantity-in-stock-per-group)
-  - [Financial value of stock by group](#financial-value-of-stock-by-group)
-  - [Min, max and avg price by group](#min-max-and-avg-price-by-group)
+  + [Count of products by group](#count-of-products-by-group)
+  + [Quantity in stock per group](#quantity-in-stock-per-group)
+  + [Financial value of stock by group](#financial-value-of-stock-by-group)
+  + [Min, max and avg price by group](#min-max-and-avg-price-by-group)
 + [Calculated field](#calculated-field)
+
++ [Users and permissions](#users-and-permissions)
+  + [Creating a new index for access testing](#creating-a-new-index-for-access-testing)
+  + [Insert some countries for testing](#insert-some-countries-for-testing)
+  + [Create a new role for read-only access to the countries index](#create-a-new-role-for-read-only-access-to-the-countries-index)
+  + [Create a new user with read-only access to the countries index](#create-a-new-user-with-read-only-access-to-the-countries-index)
+  + [Get user data](#get-user-data)
+  + [List all users](#list-all-users)
+  + [Listing countries with new user credentials](#listing-countries-with-new-user-credentials)
+  + [Trying insert a new country with new user credentials](#trying-insert-a-new-country-with-new-user-credentials)
+  + [Deleting an user](#deleting-an-user)
+  + [Deleting a role](#deleting-a-role)
+  + [More information about Elasticsearch security](#more-information-about-elasticsearch-security)
 
 ## Preparing the study environment
 We will study **Elasticsearch** and **Logstash**. So we need to install these tools.
@@ -754,3 +767,164 @@ curl -H 'Content-Type: application/json' -XGET "localhost:9200/products/_search?
   "size": 10
 }'
 ```
+
+## Users and permissions
+
+The next topics demonstrate how to create, modify, and delete a user. 
+A user will be created who can only read data from a specific index.
+
+
+### Creating a new index for access testing
+```
+curl -s -u elastic:password \
+     -H "Content-Type: application/json" \
+     -X PUT "localhost:9200/countries" \
+     -d '{
+           "mappings": {
+             "properties": {
+               "iso_code": {
+                 "type": "keyword"
+               },
+               "country_name": {
+                 "type": "text"
+               }
+             }
+           }
+         }'
+```
+         
+#### Expected output:
+```
+{"acknowledged":true,"shards_acknowledged":true,"index":"countries"}
+```
+
+### Insert some countries for testing
+```
+curl -s -u elastic:password \
+     -H "Content-Type: application/json" \
+     -X POST "localhost:9200/countries/_doc?pretty" \
+     -d '{
+           "iso_code": "BR",
+           "country_name": "Brazil"
+         }'
+
+curl -s -u elastic:password \
+     -H "Content-Type: application/json" \
+     -X POST "localhost:9200/countries/_doc?pretty" \
+     -d '{
+           "iso_code": "US",
+           "country_name": "United States"
+         }'
+
+```
+
+### Create a new role for read-only access to the countries index
+```
+curl -s -u elastic:password \
+     -H "Content-Type: application/json" \
+     -X PUT "localhost:9200/_security/role/read_only_countries" \
+     -d '{
+           "indices": [
+             {
+               "names": ["countries"],
+               "privileges": ["read"]
+             }
+           ]
+         }'
+```
+
+#### Expected output:
+```
+{"role":{"created":true}}
+```
+ 
+### Create a new user with read-only access to the countries index:
+```
+curl -s -u elastic:password \
+  -H "Content-Type: application/json" \
+  -X POST "localhost:9200/_security/user/daniel" \
+  -d '
+    {
+      "password": "myPassword",
+      "roles": ["read_only_countries"]
+    }'
+```
+    
+#### Expected output:
+```
+{"created" : true}
+```
+  
+**Important!** To update a user, replace the POST method with PUT.
+  
+### Get user data
+```
+curl -s -u elastic:password -X GET "localhost:9200/_security/user/daniel?pretty"
+```
+
+#### Expected output:
+```
+{
+  "daniel" : {
+    "username" : "daniel",
+    "roles" : [
+      "read_only_countries"
+    ],
+    ...
+  }
+}
+```
+
+### List all users
+```
+curl -s -u elastic:password -X GET "localhost:9200/_security/user?pretty"
+```
+
+#### Expected output:
+JSON containing data of all users.
+
+### Listing countries with new user credentials
+```
+curl -s -u daniel:myPassword -X GET localhost:9200/countries/_search?pretty
+```
+
+#### Expected output:
+JSON containing countries!
+
+### Trying insert a new country with new user credentials:
+```
+curl -s -u daniel:MyPassword \
+     -H "Content-Type: application/json" \
+     -X POST "localhost:9200/countries/_doc?pretty" \
+     -d '{
+           "iso_code": "PT",
+           "country_name": "Portugal"
+         }'
+```
+         
+#### Expected output:
+JSON with error information (security_exception)
+
+### Deleting an user
+```
+curl -s -u elastic:password -X DELETE "localhost:9200/_security/user/daniel"
+```
+
+#### Expected output:
+```
+{"found":true}
+```
+
+### Deleting a role
+```
+curl -s -u elastic:password -X DELETE "localhost:9200/_security/role/read_only_countries"
+```
+
+#### Expected output:
+```
+{"found":true}
+```
+
+### More information about Elasticsearch security
+Para obter mais informações sobre segurança no Elasticsearch, 
+[clique aqui](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html).
