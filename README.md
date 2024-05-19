@@ -82,7 +82,12 @@
   + [Resetting password via command line script](#resetting-password-via-command-line-script)
   + [More information about Elasticsearch security](#more-information-about-elasticsearch-security)
 
++ [More queries](#more-queries)
+  + [Filtering results with filter_path parameter and _source](#filtering-results-with-filter_path-parameter-and-_source)
+
+    
 ## Preparing the study environment
+
 We will study **Elasticsearch** and **Logstash**. So we need to install these tools.
 
 ### Installing Elasticsearch on Windows, using the zip package
