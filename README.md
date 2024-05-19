@@ -939,3 +939,16 @@ curl -s -u elastic:password -X DELETE "localhost:9200/_security/role/read_only_c
 ### More information about Elasticsearch security
 For more information about Elasticsearch security, 
 [clique here!](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-cluster.html)
+
+## More queries
+
+### Filtering results with filter_path parameter and _source
+
+#### Returns only _id and some _source fields
+```
+curl -X GET "localhost:9200/countries/_search?pretty&filter_path=hits.hits._id,hits.hits._source" \
+     -H "Content-Type:application/json" -X GET \
+     -d '{
+        "_source": ["name", "currency"]
+      }'
+```
