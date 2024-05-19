@@ -89,6 +89,7 @@
     + [SQL query with parameters, JSON output format, no headers](#sql-query-with-parameters-json-output-format-no-headers)
   + [Counting all countries](#counting-all-countries)
   + [Counting countries with USD currency](#counting-countries-with-usd-currency)
+  + [All statistics about a field](#all-statistics-about-a-field)
 
     
 ## Preparing the study environment
@@ -1032,4 +1033,50 @@ curl -s -X POST "localhost:9200/countries/_count" \
 #### Expected result:
 ```
 {"count":17,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0}}
+```
+
+### All statistics about a field
+```
+curl -s -X GET "localhost:9200/countries/_search?filter_path=aggregations.latitude_stats&pretty" \
+     -H "Content-Type:application/json" \
+     -d '{
+        "aggs": {
+          "latitude_stats": {
+            "extended_stats": {
+              "field": "latitude"
+            }
+          }
+        },
+        "size":0
+      }'
+```
+
+#### Expected output:
+```
+{
+  "aggregations" : {
+    "latitude_stats" : {
+      "count" : 250,
+      "min" : -74.65,
+      "max" : 78.0,
+      "avg" : 16.40259736452,
+      "sum" : 4100.64934113,
+      "sum_of_squares" : 245532.3413868999,
+      "variance" : 713.0841652450413,
+      "variance_population" : 713.0841652450413,
+      "variance_sampling" : 715.9479570733346,
+      "std_deviation" : 26.70363580572955,
+      "std_deviation_population" : 26.70363580572955,
+      "std_deviation_sampling" : 26.75720383510457,
+      "std_deviation_bounds" : {
+        "upper" : 69.8098689759791,
+        "lower" : -37.0046742469391,
+        "upper_population" : 69.8098689759791,
+        "lower_population" : -37.0046742469391,
+        "upper_sampling" : 69.91700503472913,
+        "lower_sampling" : -37.11181030568914
+      }
+    }
+  }
+}
 ```
