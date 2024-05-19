@@ -85,6 +85,8 @@
 + [More queries](#more-queries)
   + [Filtering results with filter_path parameter and _source](#filtering-results-with-filter_path-parameter-and-_source)
   + [Searching with SQL in Elasticsearch](#searching-with-sql-in-elasticsearch)
+    + [Single SQL query](#single-sql-query)
+    + [SQL query with parameters, JSON output format, no headers](#sql-query-with-parameters-json-output-format-no-headers)
   + [Counting all countries](#counting-all-countries)
   + [Counting countries with USD currency](#counting-countries-with-usd-currency)
 
@@ -963,6 +965,7 @@ curl -X GET "localhost:9200/countries/_search?pretty&filter_path=hits.hits._id,h
 
 ### Searching with SQL in Elasticsearch
 
+#### Single SQL query
 ```
 curl -s \
      -X POST "localhost:9200/_sql?format=csv" \
@@ -970,7 +973,7 @@ curl -s \
      -d '{"query":"SELECT iso2, name, longitude FROM countries ORDER BY latitude LIMIT 5"}'
 ```
 
-#### Expected output:
+##### Expected output:
 ```
 iso2,name,longitude
 AQ,Antarctica,4.48
@@ -979,6 +982,31 @@ BV,Bouvet Island,3.4
 HM,Heard Island and McDonald Islands,72.51666666
 FK,Falkland Islands,-59.0
 ```
+
+#### SQL query with parameters, JSON output format, no headers
+```
+curl -s -X POST "localhost:9200/_sql?format=json&filter_path=rows&pretty" \
+     -H "Content-Type:application/json" \
+     -d '{
+        "query":"SELECT name FROM countries WHERE currency = ?",
+        "params":["USD"]
+      }'
+```
+##### Expected output:
+```
+{
+  "rows" : [
+    [
+      "American Samoa"
+    ],
+    [
+      "Bonaire, Sint Eustatius and Saba"
+    ],
+    ...
+  ]
+} 
+```
+
 
 ### Counting all countries
 ```
