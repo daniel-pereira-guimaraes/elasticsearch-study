@@ -952,7 +952,7 @@ For more information about Elasticsearch security,
 #### Returns only _id and some _source fields
 ```
 curl -X GET "localhost:9200/countries/_search?pretty&filter_path=hits.hits._id,hits.hits._source" \
-     -H "Content-Type:application/json" -X GET \
+     -H "Content-Type:application/json"
      -d '{
         "_source": ["name", "currency"]
       }'
