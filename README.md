@@ -85,6 +85,8 @@
 + [More queries](#more-queries)
   + [Filtering results with filter_path parameter and _source](#filtering-results-with-filter_path-parameter-and-_source)
   + [Searching with SQL in Elasticsearch](#searching-with-sql-in-elasticsearch)
+  + [Counting all countries](#counting-all-countries)
+  + [Counting countries with USD currency](#counting-countries-with-usd-currency)
 
     
 ## Preparing the study environment
@@ -976,4 +978,30 @@ GS,South Georgia,-37.0
 BV,Bouvet Island,3.4
 HM,Heard Island and McDonald Islands,72.51666666
 FK,Falkland Islands,-59.0
+```
+
+### Counting all countries
+```
+curl -s -X GET "localhost:9200/countries/_count"
+```
+#### Expected result:
+```
+{"count":250,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0}}
+```
+
+### Counting countries with USD currency
+```
+curl -s -X POST "localhost:9200/countries/_count" \
+     -H "Content-Type: application/json" \
+     -d '{
+        "query": {
+            "term": {
+                "currency": "USD"
+            }
+        }
+     }'
+```
+#### Expected result:
+```
+{"count":17,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0}}
 ```
